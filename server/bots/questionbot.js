@@ -20,13 +20,7 @@ let token = Meteor.settings.private.slack.questionbotSlackAPIToken,
     slack = new Slack(token, autoReconnect, autoMark),
     // Need to store the channel to post to (by Id? by name?)
     // TO DO - Join this channel if not a member of this channel
-    channelToPostTo = Meteor.settings.private.slack.questionbotChannel,
-    compliments = [
-      "An attractive member of our team asks:",
-      "You know that super talented person on our team? They ask:",
-      "A fantastic question has been submitted by a team member. They ask:",
-      "A member of our team asks:"
-    ];
+    channelToPostTo = Meteor.settings.private.slack.questionbotChannel
     // A var for giving each message a unique ID
 var messageId = 1;
 
@@ -48,17 +42,12 @@ slack.on('message',  Meteor.bindEnvironment(function(message) {
 
   // Checks to see if the message the channel was sent from was a private channel
   if(Modules.server.isPrivateChannel(token, message.channel)) {
-    // Checks to see if the message contains a question mark (looks for a false return)
-    if(!Modules.server.checkForQuestionMark(message)) {
-      // If it doesn't, ask the user to send the question again
-      return messageChannel.send("Are you sure that was a question? Make sure to include a '?' character!");
-    }
     // Finds a compliment to use for the message
     let messageCompliment = compliments[ _.random(0, (compliments.length - 1))];
     // Posts message to channel, including the compliment
-    postChannel.send(messageCompliment + "\n" + "> " + "*" + message.text + "*");
+    postChannel.send("A team member asks/says:" + "\n" + "> " + "*" + message.text + "*");
     // Send an IM message to the user and let them know the message has successfully been posted
-    messageChannel.send("Your question has been successfully posted to the <#" + channelId +  "|" + postChannel.name + "> channel.");
+    messageChannel.send("Your question/suggestion has been successfully posted to the <#" + channelId +  "|" + postChannel.name + "> channel.");
   }
 
   // Itterates on the messageId
