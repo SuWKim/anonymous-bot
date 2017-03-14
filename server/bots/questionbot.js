@@ -42,8 +42,6 @@ slack.on('message',  Meteor.bindEnvironment(function(message) {
 
   // Checks to see if the message the channel was sent from was a private channel
   if(Modules.server.isPrivateChannel(token, message.channel)) {
-    // Finds a compliment to use for the message
-    let messageCompliment = compliments[ _.random(0, (compliments.length - 1))];
     // Posts message to channel, including the compliment
     postChannel.send("A team member asks/says:" + "\n" + "> " + "*" + message.text + "*");
     // Send an IM message to the user and let them know the message has successfully been posted
